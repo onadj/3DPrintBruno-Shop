@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/onadj/3DPrintBruno-Shop
-    rev: v5.9.3
+    rev: test
     hooks:
     -   id: isort
         args: ['--profile', 'black']
