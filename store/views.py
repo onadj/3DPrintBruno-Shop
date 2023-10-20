@@ -10,6 +10,8 @@ from django.http import HttpResponse
 from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct
+from django.utils.translation import gettext_lazy as _
+
 
 
 def store(request, category_slug=None):

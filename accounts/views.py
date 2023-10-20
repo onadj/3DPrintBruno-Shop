@@ -17,6 +17,7 @@ from django.core.mail import EmailMessage
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
 import requests
+from django.utils.translation import gettext_lazy as _
 
 
 def register(request):
