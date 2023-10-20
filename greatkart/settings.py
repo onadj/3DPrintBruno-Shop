@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     'orders',
     'admin_honeypot',
     'storages',
+    'admin_thumbnails'
 ]
-
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
