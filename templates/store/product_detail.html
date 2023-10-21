@@ -56,24 +56,89 @@
 								<div class="item-option-select">
 									<h6>Choose Color</h6>
 									<select name="color" class="form-control" required>
-										<option value="" disabled selected>Select</option>
-										{% for i in single_product.variation_set.colors %}
-										<option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+										<option value="" disabled selected>Select Color:</option>
+										{% for variation in single_product.variations.colors.all %}
+											<option value="{{ variation.variation_value | lower }}"
+												{% if single_product.selected_variation == variation %}selected{% endif %}>
+												{{ variation.variation_value | capfirst }}
+												{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+											</option>
 										{% endfor %}
 									</select>
 								</div>
 							</div>
+							
+							{% if single_product.variations.sizes %}
 							<div class="row">
 								<div class="item-option-select">
 									<h6>Select Size</h6>
 									<select name="size" class="form-control" required>
-										<option value="" disabled selected>Select</option>
-										{% for i in single_product.variation_set.sizes %}
-										<option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+										<option value="" disabled selected>Select Size:</option>
+										{% for i in single_product.variations.sizes.all %}
+											<option value="{{ i.variation_value | lower }}">
+												{{ i.variation_value | capfirst }}
+												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+											</option>
 										{% endfor %}
 									</select>
 								</div>
 							</div>
+							{% endif %}
+							
+							{% if single_product.variations.packs %}
+							<div class="row">
+								<div class="item-option-select">
+									<h6>Select Pack:</h6>
+									<select name="pack" class="form-control" required>
+										<option value="" disabled selected>Select Pack:</option>
+										{% for i in single_product.variations.packs.all %}
+											<option value="{{ i.variation_value | lower }}">
+												{{ i.variation_value | capfirst }}
+												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endif %}
+							
+							{% if single_product.variations.switchtypes %}
+							<div class="row">
+								<div class="item-option-select">
+									<h6>Select Switch Type:</h6>
+									<select name="switchtype" class="form-control" required>
+										<option value="" disabled selected>Select Switch Type:</option>
+										{% for i in single_product.variations.switchtypes.all %}
+											<option value="{{ i.variation_value | lower }}">
+												{{ i.variation_value | capfirst }}
+												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endif %}
+							
+							{% if single_product.variations.mounting_options %}
+							<div class="row">
+								<div class="item-option-select">
+									<h6>Select Mounting Option :</h6>
+									<select name="mounting_option" class="form-control" required>
+										<option value="" disabled selected>Select Switch Type:</option>
+										{% for i in single_product.variations.mounting_options.all %}
+											<option value="{{ i.variation_value | lower }}">
+												{{ i.variation_value | capfirst }}
+												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endif %}
+							
+
+							
+
 							<hr>
 							{% if single_product.stock <= 0 %}
 							<h5 class="text-danger">Out of Stock</h5>

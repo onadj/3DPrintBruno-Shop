@@ -428,8 +428,8 @@ p:last-child {
 }
 
 .brand-wrap .logo, .navbar-brand .logo {
-  margin-right: 7px;
-  max-height: 42px;
+  margin-right: 100px;
+  max-height: 100px;
   display: inline-block;
 }
 
@@ -1037,7 +1037,7 @@ a[class*=card]:hover .title {
 }
 
 .item-logo {
-  margin-bottom: 20px;
+  margin-bottom: 100px;
   text-align: center;
 }
 .item-logo img {

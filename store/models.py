@@ -4,20 +4,20 @@ from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
 
-
 # Create your models here.
 
 class Product(models.Model):
-    product_name    = models.CharField(max_length=200, unique=True)
-    slug            = models.SlugField(max_length=200, unique=True)
-    description     = models.TextField(max_length=500, blank=True)
-    price           = models.IntegerField()
-    images          = models.ImageField(upload_to='photos/products')
-    stock           = models.IntegerField()
-    is_available    = models.BooleanField(default=True)
-    category        = models.ForeignKey(Category, on_delete=models.CASCADE)
-    created_date    = models.DateTimeField(auto_now_add=True)
-    modified_date   = models.DateTimeField(auto_now=True)
+    product_name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    description = models.TextField(max_length=500, blank=True)
+    price = models.IntegerField()
+    images = models.ImageField(upload_to='photos/products')
+    stock = models.IntegerField()
+    is_available = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+    selected_variation = models.ForeignKey('Variation', on_delete=models.SET_NULL, blank=True, null=True, related_name='variations')
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
@@ -45,24 +45,36 @@ class VariationManager(models.Manager):
 
     def sizes(self):
         return super(VariationManager, self).filter(variation_category='size', is_active=True)
-
+    
+    def packs(self):
+        return super(VariationManager, self).filter(variation_category='pack', is_active=True)
+    
+    def switchtypes(self):
+        return super(VariationManager, self).filter(variation_category='switchtype', is_active=True)
+    
+    def mounting_options(self):
+        return super(VariationManager, self).filter(variation_category='mounting_option', is_active=True)
+    
 variation_category_choice = (
     ('color', 'color'),
     ('size', 'size'),
+    ('pack', 'pack'),
+    ('switchtype', 'switchtype'),
+    ('mounting_option', 'mounting_option')
 )
 
 class Variation(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variations')
     variation_category = models.CharField(max_length=100, choices=variation_category_choice)
-    variation_value     = models.CharField(max_length=100)
-    is_active           = models.BooleanField(default=True)
-    created_date        = models.DateTimeField(auto_now=True)
+    variation_value = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created_date = models.DateTimeField(auto_now=True)
+    extra_cost = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     objects = VariationManager()
 
     def __str__(self):
         return self.variation_value
-
 
 class ReviewRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -77,7 +89,6 @@ class ReviewRating(models.Model):
 
     def __str__(self):
         return self.subject
-
 
 class ProductGallery(models.Model):
     product = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)

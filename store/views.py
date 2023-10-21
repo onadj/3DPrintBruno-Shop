@@ -53,6 +53,12 @@ def product_detail(request, category_slug, product_slug):
             orderproduct = None
     else:
         orderproduct = None
+      # Calculate the total price
+    total_price = single_product.price
+    selected_variation = single_product.selected_variation
+
+    if selected_variation and selected_variation.extra_cost:
+        total_price += selected_variation.extra_cost
 
     # Get the reviews
     reviews = ReviewRating.objects.filter(product_id=single_product.id, status=True)
