@@ -1,3 +1,4 @@
+# Import necessary modules
 from django.shortcuts import render, redirect, get_object_or_404
 from store.models import Product, Variation
 from .models import Cart, CartItem
@@ -7,6 +8,7 @@ from decimal import Decimal  # Import Decimal data type
 
 # Function to get the cart ID from the session
 def _cart_id(request):
+    # Get or create a cart session key
     cart = request.session.session_key
     if not cart:
         cart = request.session.create()
@@ -17,6 +19,7 @@ def add_cart(request, product_id):
     current_user = request.user
     product = Product.objects.get(id=product_id)
 
+    # Check if the user is authenticated (logged in)
     if current_user.is_authenticated:
         product_variation = []
         if request.method == 'POST':
@@ -25,11 +28,17 @@ def add_cart(request, product_id):
                 value = request.POST[key]
 
                 try:
-                    variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                    # Get the selected product variations
+                    variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value
+                    )
                     product_variation.append(variation)
                 except:
                     pass
 
+        # Check if the cart item exists for the authenticated user
         is_cart_item_exists = CartItem.objects.filter(product=product, user=current_user).exists()
         if is_cart_item_exists:
             cart_item = CartItem.objects.filter(product=product, user=current_user)
@@ -41,14 +50,20 @@ def add_cart(request, product_id):
                     item.save()
                     break
             else:
-                item = CartItem.objects.create(product=product, quantity=1, user=current_user)
+                # Create a new cart item with variations
+                item = CartItem.objects.create(
+                    product=product,
+                    quantity=1,
+                    user=current_user
+                )
                 item.variations.set(product_variation)
                 item.save()
         else:
+            # Create a new cart item for the authenticated user
             cart_item = CartItem.objects.create(
                 product=product,
                 quantity=1,
-                user=current_user,
+                user=current_user
             )
             cart_item.variations.set(product_variation)
             cart_item.save()
@@ -61,7 +76,12 @@ def add_cart(request, product_id):
                 value = request.POST[key]
 
                 try:
-                    variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                    # Get the selected product variations
+                    variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value
+                    )
                     product_variation.append(variation)
                 except:
                     pass
@@ -91,14 +111,20 @@ def add_cart(request, product_id):
                 item.quantity += 1
                 item.save()
             else:
-                item = CartItem.objects.create(product=product, quantity=1, cart=cart)
+                # Create a new cart item with variations
+                item = CartItem.objects.create(
+                    product=product,
+                    quantity=1,
+                    cart=cart
+                )
                 item.variations.set(product_variation)
                 item.save()
         else:
+            # Create a new cart item for non-authenticated users
             cart_item = CartItem.objects.create(
                 product=product,
                 quantity=1,
-                cart=cart,
+                cart=cart
             )
             cart_item.variations.set(product_variation)
             cart_item.save()
@@ -117,6 +143,7 @@ def remove_cart(request, product_id, cart_item_id):
             cart_item.quantity -= 1
             cart_item.save()
         else:
+            # Delete the cart item if quantity is 1
             cart_item.delete()
     except:
         pass
@@ -130,6 +157,7 @@ def remove_cart_item(request, product_id, cart_item_id):
     else:
         cart = Cart.objects.get(cart_id=_cart_id(request))
         cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+    # Delete the cart item
     cart_item.delete()
     return redirect('cart')
 
@@ -155,8 +183,9 @@ def cart(request, total=Decimal('0'), quantity=0, cart_items=None, tax=Decimal('
             extra_costs[cart_item.id] = extra_cost
             cart_item.subtotal = subtotal  # Store the subtotal in the cart_item
 
-        tax = (Decimal('0.02') * (total + sum(extra_costs.values())))  # Include extra cost in tax calculation
-        grand_total = total + tax + sum(extra_costs.values())  # Include extra cost in grand total
+        tax = Decimal('0.02') * (total + sum(extra_costs.values()))
+        grand_total = total + tax  # Calculate grand total as the sum of total and tax
+
     except ObjectDoesNotExist:
         pass
 
@@ -170,7 +199,8 @@ def cart(request, total=Decimal('0'), quantity=0, cart_items=None, tax=Decimal('
     }
     return render(request, 'store/cart.html', context)
 
-
+# Function for the checkout page
+@login_required(login_url='login')
 # Function for the checkout page
 @login_required(login_url='login')
 def checkout(request):
@@ -189,16 +219,19 @@ def checkout(request):
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
         for cart_item in cart_items:
-            total += Decimal(cart_item.product.price) * Decimal(cart_item.quantity)
-            quantity += cart_item.quantity
+            base_price = Decimal(cart_item.product.price)
+            quantity = cart_item.quantity
+            extra_cost = sum([Decimal(variation.extra_cost) for variation in cart_item.variations.all()])
+            subtotal = (base_price + extra_cost) * quantity
 
-            extra_cost = Decimal('0')
-            for variation in cart_item.variations.all():
-                extra_cost += Decimal(variation.extra_cost)
+            total += subtotal
+            quantity += cart_item.quantity
             extra_costs[cart_item.id] = extra_cost
+            cart_item.subtotal = subtotal  # Store the subtotal in the cart_item
 
         tax = Decimal('0.02') * (total + sum(extra_costs.values()))
-        grand_total = total + tax + sum(extra_costs.values())
+        grand_total = total + tax  # Calculate grand total as the sum of total and tax
+
     except ObjectDoesNotExist:
         pass
 
@@ -210,4 +243,5 @@ def checkout(request):
         'grand_total': grand_total,
         'extra_costs': extra_costs,
     }
+
     return render(request, 'store/checkout.html', context)
