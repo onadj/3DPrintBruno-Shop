@@ -107,7 +107,7 @@ def place_order(request, total=0, quantity=0):
         total += cart_item.subtotal  # Calculate the total for this order
         quantity += cart_item.quantity
 
-    tax = (2 * total) / 100
+    tax = (2* total) / 100
     grand_total = total + tax
 
     if request.method == 'POST':

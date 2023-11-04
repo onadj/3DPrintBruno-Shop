@@ -3,7 +3,7 @@
 /* ==================== GLOBAL STYLES ======================= */
 @import url("https://rsms.me/inter/inter.css");
 html {
-  font-family: "Inter", sans-serif;
+  font-family: 'Lato';
   font-size: 15px;
 }
 
@@ -13,6 +13,9 @@ INCLUDE STYLES AND COMPONENTS
 /* ================== HELPERS  =================== */
 a:hover {
   text-decoration: none;
+}
+.shopping-bag-icon {
+  font-size: 24px; /* Adjust the size as needed */
 }
 
 .img-wrap {
