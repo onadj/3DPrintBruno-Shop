@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_session_timeout.middleware.SessionTimeoutMiddleware',
+  
 ]
 
 SESSION_EXPIRE_SECONDS = 3600  # 1 hour
@@ -177,3 +177,12 @@ MESSAGE_TAGS = {
 # EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 # EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 # EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
+
+# SMTP configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Gmail SMTP uses port 587 for TLS
+EMAIL_HOST_USER = 'djambodprintinglab@gmail.com'
+EMAIL_HOST_PASSWORD = 'vwyulrwyevvnmfnj'
+EMAIL_USE_TLS = True

@@ -30,7 +30,7 @@
                         <div class="filter-content collapse show" id="collapse_1" style="">
                             <div class="card-body">
                                 <ul class="list-group">
-                                    <li class="list-group-item"><a href="{% url 'store' %}"><strong><p class="text-secondary">Products</p> </strong></a></li>
+                                    <li class="list-group-item"><a href="{% url 'store' %}"><strong><p class="text-secondary">Show All Products</p> </strong></a></li>
                                     {% for category in links %}
                                         <li class="list-group-item">
                                             <a href="{{ category.get_url }}">

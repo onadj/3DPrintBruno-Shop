@@ -12,6 +12,7 @@ from django.contrib import messages
 from orders.models import OrderProduct
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist 
+from decimal import Decimal
 
 
 
@@ -113,48 +114,47 @@ def submit_review(request, product_id):
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
 
-def checkout(request):
-    try:
-        tax = 0
-        grand_total = 0
-        total = 0
-        cart_items = []
-        quantity = 0  # Initialize quantity
 
+
+def checkout(request):
+    total = Decimal('0')
+    quantity = 0
+    cart_items = None
+    tax = Decimal('0')
+    grand_total = Decimal('0')
+    extra_costs = {}
+
+    try:
         if request.user.is_authenticated:
             cart_items = CartItem.objects.filter(user=request.user, is_active=True)
         else:
-            try:
-                cart = Cart.objects.get(cart_id=_cart_id(request))
-                cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
-                # Calculate subtotals for each cart item and update total and quantity
-                for cart_item in cart_items:
-                    subtotal = cart_item.product.price * cart_item.quantity
-                    if cart_item.selected_variation and cart_item.selected_variation.extra_cost:
-                        subtotal += cart_item.selected_variation.extra_cost
-                    cart_item.subtotal = subtotal  # Add a 'subtotal' attribute to the cart_item
-                    total += subtotal
-                    quantity += cart_item.quantity
+        for cart_item in cart_items:
+            base_price = Decimal(cart_item.product.price)
+            quantity = cart_item.quantity
+            extra_cost = sum([Decimal(variation.extra_cost) for variation in cart_item.variations.all()])
+            subtotal = base_price * quantity
 
-            except Cart.DoesNotExist:  # Handle the ObjectDoesNotExist exception
-                # Handle the case when the cart does not exist (empty cart)
-                messages.info(request, "Your cart is empty.")  # You can use messages to display a message
-                return redirect("cart:cart_view")  # Redirect the user to the cart page
+            total += subtotal
+            quantity += cart_item.quantity
+            extra_costs[cart_item.id] = extra_cost
+            cart_item.subtotal = subtotal  # Store the subtotal in the cart_item
 
-        # Calculate tax and grand total
-        tax = (2 * total) / 100
-        grand_total = total + tax
+        tax = (Decimal('0.02') * (total + sum(extra_costs.values()))).quantize(Decimal('0.01'))
+        grand_total = (total + tax).quantize(Decimal('0.01'))
 
     except ObjectDoesNotExist:
         pass
 
     context = {
-        'total': total,
+        'total': total.quantize(Decimal('0.01')),  # Round total to two decimal places
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,
         'grand_total': grand_total,
+        'extra_costs': extra_costs,
     }
-    return render(request, 'store/checkout.html', context)
 
+    return render(request, 'store/checkout.html', context)

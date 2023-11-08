@@ -5,7 +5,7 @@ from .forms import OrderForm
 import datetime
 from .models import Order, Payment, OrderProduct
 import json
-from store.models import Product
+from store.models import Product,Variation
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
@@ -40,17 +40,13 @@ def payments(request):
         orderproduct.quantity = item.quantity
 
         # Get selected variations for this cart item
-        product_variation = Variation.objects.filter(product=item.product, item_id__in=item.variations.all())
+        product_variation = item.variations.all()
 
-        if product_variation.exists():
-            orderproduct.variations.set(product_variation)
-
-        orderproduct.product_price = item.product.price
-
-        # If there are variations with extra cost, add it to the product price
-        for variation in product_variation:
-            if variation.extra_cost:
-                orderproduct.product_price += variation.extra_cost
+        if product_variation:
+            extra_cost = sum(variation.extra_cost for variation in product_variation)
+            orderproduct.product_price = item.product.price + extra_cost
+        else:
+            orderproduct.product_price = item.product.price
 
         orderproduct.ordered = True
         orderproduct.save()
@@ -65,7 +61,7 @@ def payments(request):
 
     # Send order received email to the customer
     mail_subject = 'Thank you for your order!'
-    message = render_to_string('orders/order_received_email.html', {
+    message = render_to_string('orders/order_recieved_email.html', {
         'user': request.user,
         'order': order,
     })
@@ -79,6 +75,7 @@ def payments(request):
         'transID': payment.payment_id,
     }
     return JsonResponse(data)
+
 
 def place_order(request, total=0, quantity=0):
     current_user = request.user
