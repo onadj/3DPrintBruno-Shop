@@ -8,7 +8,20 @@ import json
 from store.models import Product,Variation
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from decimal import Decimal
 
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
+from carts.models import CartItem
+from .forms import OrderForm
+import datetime
+from .models import Order, Payment, OrderProduct
+import json
+from store.models import Product, Variation
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from decimal import Decimal
 
 def payments(request):
     body = json.loads(request.body)
@@ -45,11 +58,14 @@ def payments(request):
         if product_variation:
             extra_cost = sum(variation.extra_cost for variation in product_variation)
             orderproduct.product_price = item.product.price + extra_cost
+            orderproduct.save()  # Save the OrderProduct before setting M2M relationship
+            orderproduct.variations.set(product_variation)  # Set the selected variations for this order product
         else:
             orderproduct.product_price = item.product.price
+            orderproduct.save()  # Save the OrderProduct
 
         orderproduct.ordered = True
-        orderproduct.save()
+        orderproduct.save()  # Save the OrderProduct
 
         # Reduce the quantity of the sold products
         product = Product.objects.get(id=item.product_id)
@@ -76,8 +92,7 @@ def payments(request):
     }
     return JsonResponse(data)
 
-
-def place_order(request, total=0, quantity=0):
+def place_order(request):
     current_user = request.user
 
     # If the cart count is less than or equal to 0, then redirect back to the shop
@@ -86,9 +101,9 @@ def place_order(request, total=0, quantity=0):
     if cart_count <= 0:
         return redirect('store')
 
-    grand_total = 0
-    tax = 0
-    total_subtotal = 0  # Initialize total_subtotal
+    total = Decimal(0)  # Initialize total as Decimal
+    quantity = 0
+    total_subtotal = Decimal(0)  # Initialize total_subtotal as Decimal
 
     for cart_item in cart_items:
         product = cart_item.product
@@ -97,15 +112,16 @@ def place_order(request, total=0, quantity=0):
         cart_item.subtotal = cart_item.product.price * cart_item.quantity
         for variation in cart_item.variations.all():
             if variation.extra_cost:
-                cart_item.subtotal += variation.extra_cost * cart_item.quantity
+                cart_item.subtotal += Decimal(variation.extra_cost) * cart_item.quantity
 
         total_subtotal += cart_item.subtotal  # Add to total_subtotal
 
         total += cart_item.subtotal  # Calculate the total for this order
         quantity += cart_item.quantity
 
-    tax = (2* total) / 100
-    grand_total = total + tax
+    # Assuming tax is a static value
+    tax = Decimal('7.99')
+    grand_total = total + tax  # Add tax to grand_total
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -145,7 +161,7 @@ def place_order(request, total=0, quantity=0):
                 'total': total,
                 'tax': tax,
                 'grand_total': grand_total,
-                'total_subtotal': total_subtotal,  # Pass total_subtotal to the context
+                'total_subtotal': total_subtotal,
             }
             return render(request, 'orders/payments.html', context)
     else:

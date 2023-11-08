@@ -24,7 +24,7 @@
                         <!-- Start .row -->
                         <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"><img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
+                            <div class="invoice-logo"><img src="media/photos/products/logodjambo3d.JPG" alt="Invoice logo" style="max-height: 40px;"></div>
                         </div>
                         <!-- col-lg-6 end here -->
                         <div class="col-lg-6">
@@ -60,46 +60,52 @@
                                             <tr>
                                                 <th class="per70 text-center">Products</th>
                                                 <th class="per5 text-center">Qty</th>
-                                                <th class="per25 text-center">Total</th>
+                                                <th class="per25 text-center">Sub Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                          {% for item in ordered_products %}
+                                            {% for item in ordered_products %}
                                             <tr>
-                                                <td>{{item.product.product_name}}
-                                                  <p class="text-muted small">
-                                          					{% if item.variations.all %}
-                                          						{% for i in item.variations.all %}
-                                          							{{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
-                                          						{% endfor %}
-                                          					{% endif %}
-                                          				</p>
+                                                <td>
+                                                    <div class="product-info">
+                                                        <img src="{{ item.product.images.url }}" alt="{{ item.product.product_name }}" class="img-sm">
+                                                        <p class="product-name">
+                                                            {{ item.product.product_name }}
+                                                        </p>
+                                                        <p class="text-muted small">
+                                                            {% if item.variations.all %}
+                                                            {% for i in item.variations.all %}
+                                                            {{ i.variation_category|capfirst }}: {{ i.variation_value|capfirst }}<br>
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                        </p>
+                                                    </div>
                                                 </td>
-                                                <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">{{ item.quantity }}</td>
+                                                <td class="text-center">€{{ item.product_price }} EUR</td>
                                             </tr>
-                                          {% endfor %}
+                                            {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">${{subtotal}} USD</th>
+                                                <th colspan="2" class="text-right">Total:</th>
+                                                <th class="text-center">€{{subtotal}} EUR</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">${{order.tax}} USD</th>
+                                                <th colspan="2" class="text-right">Shipping Cost:</th>
+                                                <th class="text-center">€{{order.tax}} EUR</th>
                                             </tr>
 
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">${{order.order_total}} USD</th>
+                                                <th class="text-center">€{{order.order_total}} EUR</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                             </div>
                             <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us!</p>
+                                <p class="text-center">Thank you for shoping!</p>
                             </div>
                         </div>
                         <!-- col-lg-12 end here -->

@@ -142,14 +142,14 @@ def checkout(request):
             extra_costs[cart_item.id] = extra_cost
             cart_item.subtotal = subtotal  # Store the subtotal in the cart_item
 
-        tax = (Decimal('0.02') * (total + sum(extra_costs.values()))).quantize(Decimal('0.01'))
-        grand_total = (total + tax).quantize(Decimal('0.01'))
+        tax = (Decimal('7.99') * (total + sum(extra_costs.values()))).quantize(Decimal('7.99'))
+        grand_total = (total + tax).quantize(Decimal('7.99'))
 
     except ObjectDoesNotExist:
         pass
 
     context = {
-        'total': total.quantize(Decimal('0.01')),  # Round total to two decimal places
+        'total': total.quantize(Decimal('7.99')),  # Round total to two decimal places
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,
