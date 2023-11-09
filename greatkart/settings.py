@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'orders',
     'admin_honeypot',
     'storages',
-    'admin_thumbnails'
+    'admin_thumbnails',
+    'contact',
+    'about'
 ]
 SITE_ID = 1
 MIDDLEWARE = [

@@ -35,7 +35,8 @@
                                         <li class="list-group-item">
                                             <a href="{{ category.get_url }}">
                                                 {% if category.cat_image %}
-                                                    <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}" class="img-fluid category-image">
+                                                <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}" class="img-fluid img-thumbnail category-image">
+
                                                 {% endif %}
                                                 <span class="text-secondary"><strong>{{ category.category_name }}</strong></span>
                                             </a>
