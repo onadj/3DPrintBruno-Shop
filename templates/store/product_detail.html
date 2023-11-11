@@ -8,23 +8,45 @@
 
 		<!-- ============================ COMPONENT 1 ================================= -->
 		<div class="card">
-			<div class="row no-gutters">
-				<aside class="col-md-6">
-					<article class="gallery-wrap">
-						<div class="img-big-wrap mainImage">
-							<center><img src="{{ single_product.images.url }}"></center>
-						</div> <!-- img-big-wrap.// -->
+            <div class="row no-gutters">
+                <aside class="col-md-6">
+                    <article class="gallery-wrap">
+                        <div class="img-big-wrap mainImage">
+                            <center><img src="{{ single_product.images.url }}"></center>
+                        </div> <!-- img-big-wrap.// -->
 
-					</article> <!-- gallery-wrap .end// -->
-					<ul class="thumb">
-						<li>
-							<a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a>
-							{% for i in product_gallery %}
-							<a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
-							{% endfor %}
-						</li>
-					</ul>
-				</aside>
+                    </article> <!-- gallery-wrap .end// -->
+
+                    <ul class="thumb">
+                        <li>
+                            <a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a>
+                            {% for i in product_gallery %}
+                            <a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
+                            {% endfor %}
+
+                        </li>
+                    </ul>
+
+                    {% if single_product.videos.all %}
+                    <div class="video-wrap">
+                       
+
+                        <ul class="thumb">
+                            {% for video in single_product.videos.all %}
+                            <li>
+                                <a href="{{ video.video.url }}" target="mainVideo"><video width="100%" height="auto" controls>
+                                    <source src="{{ video.video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video></a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% else %}
+                    <p>No videos available for this product.</p>
+                    {% endif %}
+
+                </aside>
 				<main class="col-md-6 border-left">
 
 					<form action="{% url 'add_cart' single_product.id %}" method="POST">
@@ -150,7 +172,7 @@
 				</main> <!-- col.// -->
 			</div> <!-- row.// -->
 		</div> <!-- card.// -->
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
+		
 
 		<br>
 
@@ -202,7 +224,7 @@
 						<p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
 						{% endif %}
 						<div class="alert alert-danger" role="alert" style="margin-top:10px;">
-  2-Factor Review Submission is disabled for demo purpose.
+ when deployed will use auth for review if user bougth the product
 </div>
 
 					</div>

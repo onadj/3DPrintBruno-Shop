@@ -100,3 +100,10 @@ class ProductGallery(models.Model):
     class Meta:
         verbose_name = 'productgallery'
         verbose_name_plural = 'product gallery'
+
+class ProductVideo(models.Model):
+    product = models.ForeignKey(Product, related_name='videos', on_delete=models.CASCADE)
+    video = models.FileField(upload_to='store/products')
+
+    def __str__(self):
+        return self.product.product_name
