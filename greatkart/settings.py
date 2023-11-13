@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'storages',
     'admin_thumbnails',
     'contact',
-    'about'
+    'about',
+    'import_export'
 ]
 SITE_ID = 1
 MIDDLEWARE = [

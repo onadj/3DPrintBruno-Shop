@@ -67,7 +67,7 @@
 							<hr>
 							<div class="row">
 								<div class="item-option-select">
-									<h6>Choose Color</h6>
+									<h6>Select Color:</h6>
 									<select name="color" class="form-control" required>
 										<option value="" disabled selected>Select Color:</option>
 										{% for variation in single_product.variations.colors.all %}
@@ -640,6 +640,7 @@
 							{% else %}
 							<button type="submit" class="btn  btn-secondary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
 							{% endif %}
+						
 						</article> <!-- product-info-aside .// -->
 					</form>
 				</main> <!-- col.// -->
@@ -683,7 +684,7 @@
 						<br>
 						 {% if user.is_authenticated %}
 							{% if orderproduct %}
-								<input type="submit" value="Submit Review" class="btn btn-primary">
+								<input type="submit" value="Submit Review" class="btn btn-secondary">
 							{% else %}
 								<p>You must purchase this product to post a review.</p>
 							{% endif %}

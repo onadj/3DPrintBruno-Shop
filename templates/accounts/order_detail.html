@@ -51,39 +51,50 @@
                                             <tr>
                                                 <th class="per70 text-center">Products</th>
                                                 <th class="per5 text-center">Qty</th>
-                                                <th class="per25 text-center">Total</th>
+                                                <th class="per25 text-center">Sub Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                          {% for item in order_detail %}
+                                            {% for item in order_detail %}
                                             <tr>
-                                                <td>{{item.product.product_name}}
-                                                  <p class="text-muted small">
-                                          					{% if item.variations.all %}
-                                          						{% for i in item.variations.all %}
-                                          							{{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
-                                          						{% endfor %}
-                                          					{% endif %}
-                                          				</p>
+                                                <td>
+                                                    <div class="product-info">
+                                                        {% if item.product.images %}
+                                                            <img src="{{ item.product.images.url }}" alt="{{ item.product.product_name }}" class="img-sm">
+                                                        {% endif %}
+                                                        <p class="product-name">
+                                                            {{ item.product.product_name }}
+                                                        </p>
+                                                        <p class="text-muted small">
+                                                            {% if item.variations.all %}
+                                                                {% for i in item.variations.all %}
+                                                                    {{ i.variation_category|capfirst }}: {{ i.variation_value|capfirst }}<br>
+                                                                    {% if i.extra_cost > 0 %}
+                                                                        <p class="my-0 small text-muted"> (+{{ i.extra_cost|floatformat:2 }} per item)</p>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </p>
+                                                    </div>
                                                 </td>
-                                                <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">{{ item.quantity }}</td>
+                                                <td class="text-center">€{{ item.product_price }} EUR</td>
                                             </tr>
-                                          {% endfor %}
+                                        {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">${{subtotal}} USD</th>
+                                                <th colspan="2" class="text-right">Total:</th>
+                                                <th class="text-center">€{{subtotal}} EUR</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">${{order.tax}} USD</th>
+                                                <th colspan="2" class="text-right">Shiping Cost:</th>
+                                                <th class="text-center">€{{order.tax}} EUR</th>
                                             </tr>
 
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">${{order.order_total}} USD</th>
+                                                <th class="text-center">€{{order.order_total}} EUR</th>
                                             </tr>
                                         </tfoot>
                                     </table>

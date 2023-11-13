@@ -1,9 +1,7 @@
+# models.py
 from django.db import models
 from accounts.models import Account
 from store.models import Product, Variation
-
-
-
 
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -15,7 +13,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.payment_id
-
 
 class Order(models.Model):
     STATUS = (
@@ -46,16 +43,22 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
 
-    def __str__(self):
-        return self.first_name
+    def selected_variations(self):
+        return ', '.join([f"{variation.variation_category}: {variation.variation_value}" for order_product in self.orderproduct_set.all() for variation in order_product.variations.all()])
 
+    @property
+    def product_names(self):
+        return ', '.join([order_product.product.product_name for order_product in self.orderproduct_set.all()])
+
+    @property
+    def selected_variations(self):
+        return ', '.join([f"{variation.variation_category}: {variation.variation_value}" for order_product in self.orderproduct_set.all() for variation in order_product.variations.all()])
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -70,7 +73,8 @@ class OrderProduct(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def selected_variations(self):
-        variation_strings = []
-        for variation in self.variations.all():
-            variation_strings.append(f"{variation.variation_category}: {variation.variation_value}")
-        return "\n".join(variation_strings)
+        return ', '.join([f"{variation.variation_category}: {variation.variation_value}" for variation in self.variations.all()])
+
+    @property
+    def product_name(self):
+        return self.product.product_name
