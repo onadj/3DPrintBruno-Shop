@@ -1,9 +1,26 @@
-{% autoescape off %}
+Hi {{ user.first_name }},
 
-Hi {{user.first_name}},
+Your order has been received!
 
-YOUR ORDER HAS BEEN RECIEVED
+Order Number: {{ order.order_number }}
+_________________________________________________________________________________________________________________________
+Order Details:
+{% for item in order.orderproduct_set.all %}
+- Product: {{ item.product.product_name }}
+- Quantity: {{ item.quantity }}
+- Subtotal: €{{ item.product_price }} EUR
+{% if item.variations.all %}
+Selected Options:
+{% for variation in item.variations.all %}
+{{ variation.variation_category|capfirst }}: {{ variation.variation_value|capfirst }}
+{% if variation.extra_cost > 0 %} (+€{{ variation.extra_cost|floatformat:2 }} per item){% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+_________________________________________________________________________________________________________________________
+Shipping Cost: €{{ order.shipping_cost }} EUR
+Grand Total: €{{ order.order_total }} EUR
 
-Order Number: {{order.order_number}}
+For real-time updates on your order status, please log in to our website www.example.com.
 
-{% endautoescape %}
+Thank you for shopping with us!
