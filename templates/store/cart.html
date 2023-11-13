@@ -36,13 +36,13 @@
                                             <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
                                             <p class="text-muted small">
                                                 {% if cart_item.variations.all %}
-                                                <br>
+                                                
                                                 {% for item in cart_item.variations.all %}
 												<p class="my-0 small text-muted"> {{ item.variation_category | capfirst }}: {{ item.variation_value | capfirst }}</p>
                                                 {% if item.extra_cost > 0 %}
 												<p class="my-0 small text-muted"> (+{{ item.extra_cost|floatformat:2 }} per item)</p>
                                                 {% endif %}
-                                                <br>
+                                                
                                                 {% endfor %}
                                                 {% endif %}
                                             </p>
@@ -74,7 +74,7 @@
                                      <div class="price-wrap">
                                       
                                         <var class="price">
-                                            $ {{ cart_item.subtotal|floatformat:2 }}
+                                            € {{ cart_item.subtotal|floatformat:2 }}
                                         </var>
                                      </div> <!-- price-wrap .// -->
                                   </td>
@@ -97,15 +97,15 @@
                     <div class="card-body">
                         <dl class="dlist-align">
                             <dt>Total price:</dt>
-                            <dd class="text-right">$ {{ total|floatformat:2|default:0 }}</dd>
+                            <dd class="text-right">€ {{ total|floatformat:2|default:0 }}</dd>
                         </dl>
                         <dl class= "dlist-align">
                             <dt>Tax:</dt>
-                            <dd class="text-right">$ {{ tax|floatformat:2 }}</dd>
+                            <dd class="text-right">€ {{ tax|floatformat:2 }}</dd>
                         </dl>
                         <dl class="dlist-align">
                             <dt>Grand Total:</dt>
-                            <dd class="text-right text-dark b"><strong>$ {{ grand_total|floatformat:2 }}</strong></dd>
+                            <dd class="text-right text-dark b"><strong>€ {{ grand_total|floatformat:2 }}</strong></dd>
                         </dl>
                         <hr>
                         <p class="text-center mb-3">

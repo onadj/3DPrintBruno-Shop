@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Product, Variation, ReviewRating, ProductGallery, ProductVideo
 import admin_thumbnails
+from django.utils.html import format_html
 
 
 @admin_thumbnails.thumbnail('image')
@@ -9,9 +10,14 @@ class ProductGalleryInline(admin.TabularInline):
     extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'price', 'stock', 'category', 'modified_date', 'is_available')
+    list_display = ('product_name', 'display_image', 'price', 'stock', 'category', 'modified_date', 'is_available')
     prepopulated_fields = {'slug': ('product_name',)}
     inlines = [ProductGalleryInline]
+
+    def display_image(self, obj):
+        return format_html('<img src="{}" width="50" height="50" />'.format(obj.images.url))
+
+    display_image.short_description = 'Image'
 
 class VariationAdmin(admin.ModelAdmin):
     list_display = ('product', 'variation_category','variation_value','extra_cost', 'is_active')

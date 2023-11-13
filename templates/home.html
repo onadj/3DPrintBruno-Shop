@@ -2,12 +2,45 @@
 {% load static %}
 
 {% block content %}
+<style>
+  .about-content,
+  .contact-content {
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 1); /* Set the background color to white */
+    text-align: center;
+  }
 
+  .about-img,
+  .contact-img {
+    width: 100%; /* Adjust the width as needed */
+    max-height: 300px; /* Adjust the height as needed */
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .btn-custom {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .btn-custom:hover {
+    background-color: gray;
+    color: white;
+  }
+</style>
 
 <section class="section-intro padding-y-sm">
     <div class="container-fluid p-0">
       <div class="intro-banner-wrap">
-        <img src="media/photos/products/banner.JPG"class="img-fluid rounded banner-image w-100">
+        <img src="media/photos/products/banner.JPG" class="img-fluid rounded banner-image w-100">
       </div>
     </div>
   </section>
@@ -45,6 +78,39 @@
       </div> 
     </div>
   </section>
+
+  <!-- About Us Section -->
+  <section class="section-about padding-y-lg">
+    <div class="container">
+      <div class="card bg-white">
+        <div class="card-body">
+          <div class="about-content">
+            <img src="media/photos/products/about.jpg" class="about-img" alt="About Us Image">
+            <h3></h3>
+            <p></p>
+            <a href="{% url 'about_us' %}" class="btn btn-secondary btn-lg btn-custom mx-auto">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section-contact padding-y-lg">
+    <div class="container">
+      <div class="card bg-white">
+        <div class="card-body">
+          <div class="contact-content">
+            <img src="media/photos/products/contact1.jpg" class="contact-img" alt="Contact Us Image">
+            <h3></h3>
+            <p></p>
+            <a href="{% url 'contact' %}" class="btn btn-secondary btn-lg btn-custom mx-auto">Get in Touch</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </body>
 </html>
 {% endblock %}
