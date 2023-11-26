@@ -58,18 +58,19 @@
 
 
 							<div class="mb-3">
-								<var class="price h4">$ {{single_product.price}}</var>
+								<var class="price h4">€{{single_product.price}}</var>
 							</div>
 
 							<p>{{ single_product.description }}</p>
 
 
 							<hr>
+
+							{% if single_product.variations.colors %}
 							<div class="row">
 								<div class="item-option-select">
 									<h6>Select Color:</h6>
 									<select name="color" class="form-control" required>
-										<option value="" disabled selected>Select Color:</option>
 										{% for variation in single_product.variations.colors.all %}
 											<option value="{{ variation.variation_value | lower }}"
 												{% if single_product.selected_variation == variation %}selected{% endif %}>
@@ -80,47 +81,49 @@
 									</select>
 								</div>
 							</div>
+						{% endif %}
+						
 							
-							{% if single_product.variations.sizes %}
-							<div class="row">
-								<div class="item-option-select">
-									<h6>Select Size</h6>
-									<select name="size" class="form-control" required>
-										<option value="" disabled selected>Select Size:</option>
-										{% for i in single_product.variations.sizes.all %}
-											<option value="{{ i.variation_value | lower }}">
-												{{ i.variation_value | capfirst }}
-												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
-											</option>
-										{% endfor %}
-									</select>
-								</div>
+						{% if single_product.variations.sizes %}
+						<div class="row">
+							<div class="item-option-select">
+								<h6>Select Size:</h6>
+								<select name="size" class="form-control" required>
+									{% for i in single_product.variations.sizes.all %}
+										<option value="{{ i.variation_value | lower }}"
+											{% if single_product.selected_variation == i %}selected{% endif %}>
+											{{ i.variation_value | capfirst }}
+											{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+										</option>
+									{% endfor %}
+								</select>
 							</div>
-							{% endif %}
+						</div>
+					{% endif %}
 							
-							{% if single_product.variations.packs %}
-							<div class="row">
-								<div class="item-option-select">
-									<h6>Select Pack:</h6>
-									<select name="pack" class="form-control" required>
-										<option value="" disabled selected>Select Pack:</option>
-										{% for i in single_product.variations.packs.all %}
-											<option value="{{ i.variation_value | lower }}">
-												{{ i.variation_value | capfirst }}
-												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
-											</option>
-										{% endfor %}
-									</select>
-								</div>
-							</div>
-							{% endif %}
+					{% if single_product.variations.packs %}
+					<div class="row">
+						<div class="item-option-select">
+							<h6>Select Pack:</h6>
+							<select name="pack" class="form-control" required>
+								{% for i in single_product.variations.packs.all %}
+									<option value="{{ i.variation_value | lower }}"
+										{% if single_product.selected_variation == i %}selected{% endif %}>
+										{{ i.variation_value | capfirst }}
+										{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				{% endif %}
 							
 							{% if single_product.variations.switchtypes %}
 							<div class="row">
 								<div class="item-option-select">
 									<h6>Select Switch Type:</h6>
 									<select name="switchtype" class="form-control" required>
-										<option value="" disabled selected>Select Switch Type:</option>
+										
 										{% for i in single_product.variations.switchtypes.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -137,7 +140,7 @@
 								<div class="item-option-select">
 									<h6>Select Mounting Option :</h6>
 									<select name="mounting_option" class="form-control" required>
-										<option value="" disabled selected>Select Switch Type:</option>
+										
 										{% for i in single_product.variations.mounting_options.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -154,7 +157,7 @@
 								<div class="item-option-select">
 									<h6>Select Color Option:</h6>
 									<select name="individual_color" class="form-control" required>
-										<option value="" disabled selected>Select Color Option:</option>
+										
 										{% for i in single_product.variations.individual_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -171,7 +174,7 @@
 								<div class="item-option-select">
 									<h6>Select Shape Option:</h6>
 									<select name="shape" class="form-control" required>
-										<option value="" disabled selected>Select Shape Option:</option>
+										
 										{% for i in single_product.variations.shapes.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -188,7 +191,7 @@
 								<div class="item-option-select">
 									<h6>Select Batteries Type:</h6>
 									<select name="batteries_type" class="form-control" required>
-										<option value="" disabled selected>Select Batteries Type:</option>
+										
 										{% for i in single_product.variations.batteries_types.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -205,7 +208,7 @@
 								<div class="item-option-select">
 									<h6>Select Set:</h6>
 									<select name="set" class="form-control" required>
-										<option value="" disabled selected>Select Set:</option>
+										
 										{% for i in single_product.variations.sets.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -222,7 +225,7 @@
 								<div class="item-option-select">
 									<h6>Select Shelf Size:</h6>
 									<select name="shelf_size" class="form-control" required>
-										<option value="" disabled selected>Select Shelf Size:</option>
+										
 										{% for i in single_product.variations.shelf_sizes.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -239,7 +242,7 @@
 								<div class="item-option-select">
 									<h6>Select Container Type:</h6>
 									<select name="container_type" class="form-control" required>
-										<option value="" disabled selected>Select Container Type:</option>
+										
 										{% for i in single_product.variations.container_types.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -256,7 +259,7 @@
 								<div class="item-option-select">
 									<h6>Select Holder Size:</h6>
 									<select name="holder_size" class="form-control" required>
-										<option value="" disabled selected>Select Holder Size:</option>
+										
 										{% for i in single_product.variations.holder_sizes.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -274,7 +277,7 @@
 								<div class="item-option-select">
 									<h6>Select First Color:</h6>
 									<select name="first_color" class="form-control" required>
-										<option value="" disabled selected>Select First Color:</option>
+										
 										{% for i in single_product.variations.first_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -291,7 +294,7 @@
 								<div class="item-option-select">
 									<h6>Select Second Color:</h6>
 									<select name="second_color" class="form-control" required>
-										<option value="" disabled selected>Select Second Color:</option>
+										
 										{% for i in single_product.variations.second_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -308,7 +311,7 @@
 								<div class="item-option-select">
 									<h6>Select Third Color:</h6>
 									<select name="third_color" class="form-control" required>
-										<option value="" disabled selected>Select Third Color:</option>
+										
 										{% for i in single_product.variations.third_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -326,7 +329,7 @@
 								<div class="item-option-select">
 									<h6>Select Forth Color:</h6>
 									<select name="fourth_color" class="form-control" required>
-										<option value="" disabled selected>Select Forth Color:</option>
+										
 										{% for i in single_product.variations.fourth_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -343,7 +346,7 @@
 								<div class="item-option-select">
 									<h6>Select Type Placement:</h6>
 									<select name="type_placement" class="form-control" required>
-										<option value="" disabled selected>Select Type Placement:</option>
+										
 										{% for i in single_product.variations.type_placements.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -361,7 +364,7 @@
 								<div class="item-option-select">
 									<h6>Select Cage Color:</h6>
 									<select name="cage_color" class="form-control" required>
-										<option value="" disabled selected>Select Cage Color:</option>
+										
 										{% for i in single_product.variations.cage_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -379,7 +382,7 @@
 								<div class="item-option-select">
 									<h6>Select Switch Color:</h6>
 									<select name="switch_color" class="form-control" required>
-										<option value="" disabled selected>Select Switch Color:</option>
+										
 										{% for i in single_product.variations.switch_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -397,7 +400,7 @@
 								<div class="item-option-select">
 									<h6>Select Seat Color:</h6>
 									<select name="seat_color" class="form-control" required>
-										<option value="" disabled selected>Select Seat Color:</option>
+										
 										{% for i in single_product.variations.seat_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -414,7 +417,7 @@
 								<div class="item-option-select">
 									<h6>Select Stand Type:</h6>
 									<select name="stand_type" class="form-control" required>
-										<option value="" disabled selected>Select Stand Type:</option>
+										
 										{% for i in single_product.variations.stand_types.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -432,7 +435,7 @@
 								<div class="item-option-select">
 									<h6>Select Phone Holder Type:</h6>
 									<select name="phone_holder_type" class="form-control" required>
-										<option value="" disabled selected>Select Phone Holder Type:</option>
+										
 										{% for i in single_product.variations.phone_holder_types.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -449,7 +452,7 @@
 								<div class="item-option-select">
 									<h6>Select Keycap Color:</h6>
 									<select name="keycaps_color" class="form-control" required>
-										<option value="" disabled selected>Select Keycap Color:</option>
+										
 										{% for i in single_product.variations.keycaps_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -466,7 +469,7 @@
 								<div class="item-option-select">
 									<h6>Select Spur Color:</h6>
 									<select name="spur_color" class="form-control" required>
-										<option value="" disabled selected>Select Spur Color:</option>
+										
 										{% for i in single_product.variations.spur_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -483,7 +486,7 @@
 								<div class="item-option-select">
 									<h6>Select Sprocket Color:</h6>
 									<select name="sprocket_color" class="form-control" required>
-										<option value="" disabled selected>Select Sprocket Color:</option>
+										
 										{% for i in single_product.variations.sprocket_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -500,7 +503,7 @@
 								<div class="item-option-select">
 									<h6>Select Screw Cap Color:</h6>
 									<select name="screw_color" class="form-control" required>
-										<option value="" disabled selected>Select Screw Cap Color:</option>
+										
 										{% for i in single_product.variations.screw_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -518,7 +521,7 @@
 								<div class="item-option-select">
 									<h6>Select Insert:</h6>
 									<select name="insert" class="form-control" required>
-										<option value="" disabled selected>Select Insert:</option>
+										
 										{% for i in single_product.variations.inserts.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -535,7 +538,7 @@
 								<div class="item-option-select">
 									<h6>Select Keyboard Thickness:</h6>
 									<select name="keyboard_thickness" class="form-control" required>
-										<option value="" disabled selected>Select Keyboard Thickness:</option>
+										
 										{% for i in single_product.variations.keyboard_thicknesss.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -552,7 +555,7 @@
 								<div class="item-option-select">
 									<h6>Select Laptop Thickness:</h6>
 									<select name="laptop_thickness" class="form-control" required>
-										<option value="" disabled selected>Select Laptop Thickness:</option>
+										
 										{% for i in single_product.variations.laptop_thicknesss.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -570,7 +573,7 @@
 								<div class="item-option-select">
 									<h6>Select Drawer Size:</h6>
 									<select name="drawer_size" class="form-control" required>
-										<option value="" disabled selected>Select Drawer Size:</option>
+										
 										{% for i in single_product.variations.drawer_sizes.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -587,7 +590,7 @@
 								<div class="item-option-select">
 									<h6>Select Him Color:</h6>
 									<select name="drawer_size" class="form-control" required>
-										<option value="" disabled selected>Select Him Color:</option>
+										
 										{% for i in single_product.variations.him_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -604,7 +607,7 @@
 								<div class="item-option-select">
 									<h6>Select She Color:</h6>
 									<select name="she_color" class="form-control" required>
-										<option value="" disabled selected>Select She Color:</option>
+										
 										{% for i in single_product.variations.she_colors.all %}
 											<option value="{{ i.variation_value | lower }}">
 												{{ i.variation_value | capfirst }}
@@ -621,9 +624,9 @@
 								<div class="item-option-select">
 									<h6>Select Headphone Band Width:</h6>
 									<select name="headphone_band_width" class="form-control" required>
-										<option value="" disabled selected>Select Headphone Band Width:</option>
 										{% for i in single_product.variations.headphone_band_widths.all %}
-											<option value="{{ i.variation_value | lower }}">
+											<option value="{{ i.variation_value | lower }}"
+												{% if single_product.selected_variation == i %}selected{% endif %}>
 												{{ i.variation_value | capfirst }}
 												{% if i.extra_cost > 0 %} (+{{ i.extra_cost }}) {% endif %}
 											</option>
@@ -631,14 +634,190 @@
 									</select>
 								</div>
 							</div>
-							{% endif %}
+						{% endif %}
 
+
+						<!--10 extra variations for customizing-->
+						{% if single_product.variations.options1 %}
+						<div class="row">
+							<div class="item-option-select">
+								<h6>Select Option:</h6>
+								<select name="option1" class="form-control" required>
+									{% for variation in single_product.variations.options1.all %}
+										<option value="{{ variation.variation_value | lower }}"
+											{% if single_product.selected_variation == variation %}selected{% endif %}>
+											{{ variation.variation_value | capfirst }}
+											{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+										</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					{% endif %}
+
+
+					{% if single_product.variations.options2 %}
+						<div class="row">
+							<div class="item-option-select">
+								<h6>Select Option:</h6>
+								<select name="option2" class="form-control" required>
+									{% for variation in single_product.variations.options2.all %}
+										<option value="{{ variation.variation_value | lower }}"
+											{% if single_product.selected_variation == variation %}selected{% endif %}>
+											{{ variation.variation_value | capfirst }}
+											{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+										</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					{% endif %}
+
+
+
+					{% if single_product.variations.options3 %}
+					<div class="row">
+						<div class="item-option-select">
+							<h6>Select Option:</h6>
+							<select name="option3" class="form-control" required>
+								{% for variation in single_product.variations.options3.all %}
+									<option value="{{ variation.variation_value | lower }}"
+										{% if single_product.selected_variation == variation %}selected{% endif %}>
+										{{ variation.variation_value | capfirst }}
+										{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				{% endif %}
+
+
+				{% if single_product.variations.options4 %}
+				<div class="row">
+					<div class="item-option-select">
+						<h6>Select Option:</h6>
+						<select name="option4" class="form-control" required>
+							{% for variation in single_product.variations.options4.all %}
+								<option value="{{ variation.variation_value | lower }}"
+									{% if single_product.selected_variation == variation %}selected{% endif %}>
+									{{ variation.variation_value | capfirst }}
+									{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			{% endif %}
+
+			{% if single_product.variations.options5 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option5" class="form-control" required>
+						{% for variation in single_product.variations.options5.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if single_product.variations.options6 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option6" class="form-control" required>
+						{% for variation in single_product.variations.options6.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if single_product.variations.options7 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option7" class="form-control" required>
+						{% for variation in single_product.variations.options7.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if single_product.variations.options8 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option8" class="form-control" required>
+						{% for variation in single_product.variations.options8.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if single_product.variations.options9 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option9" class="form-control" required>
+						{% for variation in single_product.variations.options9.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if single_product.variations.options10 %}
+			<div class="row">
+				<div class="item-option-select">
+					<h6>Select Option:</h6>
+					<select name="option10" class="form-control" required>
+						{% for variation in single_product.variations.options10.all %}
+							<option value="{{ variation.variation_value | lower }}"
+								{% if single_product.selected_variation == variation %}selected{% endif %}>
+								{{ variation.variation_value | capfirst }}
+								{% if variation.extra_cost > 0 %} (+{{ variation.extra_cost }}) {% endif %}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
+						<!---->
 
 							<hr>
 							{% if single_product.stock <= 0 %}
 							<h5 class="text-secondary">Out of Stock</h5>
 							{% else %}
-							<button type="submit" class="btn  btn-secondary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
+							<button type="submit" class="btn btn-secondary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
 							{% endif %}
 						
 						</article> <!-- product-info-aside .// -->
@@ -706,7 +885,7 @@
 				</form>
 <br>
 <header class="section-heading">
-	<h3>Customer Reviews </h3>
+	<h5>Customer Reviews </h5>
 	<div class="rating-star">
 		<span>
 			<i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
@@ -755,5 +934,34 @@
 	</div> <!-- container .//  -->
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
-
+<button id="scrollToTopBtn" title="Go to top">
+	<i class="fas fa-arrow-up"></i>
+  </button>
+  <script>
+	window.onscroll = function () {
+	  scrollFunction();
+	};
+  
+	function scrollFunction() {
+	  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+  
+	  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+		scrollToTopBtn.style.display = "block";
+	  } else {
+		scrollToTopBtn.style.display = "none";
+	  }
+	}
+  
+	document.getElementById("scrollToTopBtn").onclick = function () {
+	  scrollToTop();
+	};
+  
+	function scrollToTop() {
+	  var position = document.documentElement.scrollTop || document.body.scrollTop;
+	  if (position > 0) {
+		window.requestAnimationFrame(scrollToTop);
+		window.scrollTo(0, position - position / 8);
+	  }
+	}
+  </script>
 {% endblock %}

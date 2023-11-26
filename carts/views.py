@@ -224,10 +224,11 @@ def checkout(request):
             extra_cost = sum([Decimal(variation.extra_cost) for variation in cart_item.variations.all()])
             subtotal = (base_price + extra_cost) * quantity
 
-            total = subtotal
+            total += subtotal
+
             quantity += cart_item.quantity
             extra_costs[cart_item.id] = extra_cost
-            cart_item.subtotal = subtotal  # Store the subtotal in the cart_item
+            cart_item.subtotal = subtotal 
 
         tax = Decimal('7.99') 
         grand_total = total + tax  # Calculate grand total as the sum of total and tax

@@ -1,68 +1,203 @@
 {% load static %}
 
+{% load static %}
+
+<style>
+  .category-wrap {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    border-radius: 4px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .navbar-toggler:focus + .collapse .category-wrap {
+    display: block;
+    max-height: 500px;
+  }
+
+  .search {
+    z-index: 1;
+  }
+
+  @media (max-width: 767px) {
+    .category-wrap {
+      top: 100%;
+      width: 100%;
+      right: unset;
+      left: 0;
+    }
+
+    /* Center the welcome section and links on small devices */
+    .text-center {
+      text-align: center;
+    }
+
+    .welcome-links .widget-header,
+    .auth-links .widget-header {
+      display: inline-block;
+    }
+
+    /* Center the cart icon on small devices */
+    .auth-links .cart-icon {
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .auth-links .cart-icon .widget-header {
+      margin-left: 10px;
+    }
+  }
+
+  /* Additional styles for larger screens */
+  @media (min-width: 768px) {
+    .navbar-toggler {
+      display: none; /* Hide the hamburger menu on larger screens */
+    }
+
+    .category-wrap {
+      position: static;
+      max-height: none;
+      overflow: visible;
+      display: flex;
+      justify-content: flex-end;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    .category-wrap a {
+      margin-right: 20px;
+    }
+
+    .search {
+      display: block;
+    }
+  }
+</style>
+
+
+
+  
+
 <header class="section-header">
   <section class="header-main border-bottom">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-lg-2 col-md-3 col-6">
+        <div class="col-md-2 col-6">
           <a href="{% url 'home' %}" class="brand-wrap">
-            <img src="{% static 'images/3dlogo.PNG' %}" alt="3D Logo">
-          </a> <!-- brand-wrap.// -->
+            <img class="logo" src="{% static 'images/logodjambo3d.JPG' %}" style="max-width: 100%; height: auto; max-height: 60px;" alt="3D Logo">
+          </a>
         </div>
-        <div class="col-lg col-sm col-md col-6 flex-grow-0">
-          <div class="category-wrap dropdown d-inline-block float-right">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bars"></i> All categories
-            </button>
-            <div class="dropdown-menu">
+        <div class="col-md-8 col-6 text-right">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="category-wrap">
               <a class="dropdown-item" href="{% url 'store' %}">All Products</a>
               {% for category in links %}
                 <a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
               {% endfor %}
             </div>
-          </div> <!-- category-wrap.// -->
-        </div> <!-- col.// -->
-        <a href="{% url 'store' %}" class="btn btn-outline-secondary">Store</a>
-        <div class="col-lg col-md-6 col-sm-12 col">
-            <form action="{% url 'search' %}" class="search" method="GET">
-              <div class="input-group w-100">
-                <input type="text" class="form-control" placeholder="Search" name="keyword" required>
-                <div class="input-group-append">
-                  <button class="btn btn-secondary" type="submit">
-                    <i class="fa fa-search"></i>
-                  </button>
-                  <a href="{% url 'contact' %}" class="btn btn-outline-secondary ml-2">Contact</a>
-                  <a href="{% url 'about_us' %}" class="btn btn-outline-secondary ml-2">About Us</a>
-                </div>
-              </div>
-            </form>
           </div>
-        <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-          <div class="d-flex justify-content-end mb-3 mb-lg-0">
-            {% if user.id is None %}
-            <div class="widget-header">
-              <small class="title text-muted">Welcome guest!</small>
-              <div>
-                <a href="{% url 'login' %}">Sign in</a> <span class="dark-transp"> | </span>
-                <a href="{% url 'register' %}"> Register</a>
+        </div>
+        <div class="col-md-2 d-md-block d-none">
+          <a href="{% url 'store' %}" class="btn btn-outline-secondary">Our Store</a>
+        </div>
+        <div class="col-12 mt-3 d-md-none">
+          <a href="{% url 'store' %}" class="btn btn-outline-secondary btn-block">Our Store</a>
+        </div>
+
+        <!-- Search bar -->
+        <div class="col-md-6 col-sm-12 col-12 mt-3">
+          <form action="{% url 'search' %}" class="search" method="GET">
+            <div class="input-group w-100">
+              <input type="text" class="form-control" placeholder="Search" name="keyword" required>
+              <div class="input-group-append">
+                <button class="btn btn-secondary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
               </div>
             </div>
-            {% else %}
-            <div class = "widget-header">
-              <small class="title text-muted">Welcome {{ user.first_name }}!</small>
-              <div>
-                <a href="{% url 'dashboard' %}">Dashboard</a> <span class="dark-transp"> | </span>
-                <a href="{% url 'logout' %}"> Logout</a>
-              </div>
-            </div>
-            {% endif %}
-            <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
-              <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
-              <span class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
-            </a>
-          </div> <!-- widgets-wrap.// -->
-        </div> <!-- col.// -->
-      </div> <!-- row.// -->
-    </div> <!-- container.// -->
-  </section> <!-- header-main .// -->
-</header> <!-- section-header.// -->
+          </form>
+        </div>
+
+        <!-- User Info and Authentication Links -->
+<div class="col-lg-3 col-sm-6 col-12 order-md-last order-lg-3 text-center">
+  <div class="d-flex flex-column align-items-center mb-3 mb-lg-0">
+    {% if user.id is None %}
+      <div class="widget-header">
+        <h5 class="text-muted">Welcome Guest!</h5>
+        <div>
+          <!-- Additional links for guest if needed -->
+        </div>
+      </div>
+    {% else %}
+      <div class="widget-header">
+        <h5 class="text-muted">Welcome {{ user.first_name }}!</h6>
+        <!-- Additional links for logged-in user if needed -->
+      </div>
+    {% endif %}
+  </div>
+</div>
+<!-- End User Info and Authentication Links -->
+
+<!-- Sign in, Register, Dashboard, Logout -->
+<div class="col-md-3 col-sm-6 col-12 text-md-right text-center text-sm-center">
+  {% if user.id is None %}
+    <a href="{% url 'login' %}" class="text-muted">Sign in</a> <span class="dark-transp"> | </span>
+    <a href="{% url 'register' %}" class="text-muted">Register</a>
+  {% else %}
+    <a href="{% url 'dashboard' %}" class="text-muted">Dashboard</a> <span class="dark-transp"> | </span>
+    <a href="{% url 'logout' %}" class="text-muted">Logout</a>
+  {% endif %}
+  <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
+    <div class="icon icon-sm rounded-circle border bg-black text-white">
+      <i class="fa fa-shopping-cart"></i>
+      <span class="badge badge-pill badge-danger notify" style="background-color: grey; color: white;">{{ cart_count }}</span>
+    </div>
+  </a>
+</div>
+      </div>
+    </div>
+    <!-- container.// -->
+  </section>
+  <!-- header-main .// -->
+</header>
+<!-- Add this updated script after your existing script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var navbarToggler = document.querySelector('.navbar-toggler');
+    var categoryWrap = document.querySelector('.category-wrap');
+    var searchForm = document.querySelector('.search');
+    var categoryOpen = false;
+  
+    document.addEventListener('click', function (event) {
+      var isNavbarToggler = event.target.matches('.navbar-toggler') || event.target.closest('.navbar-toggler');
+      var isCategoryWrap = event.target.matches('.category-wrap') || event.target.closest('.category-wrap');
+      var isSearchForm = event.target.matches('.search') || event.target.closest('.search');
+  
+      if (isNavbarToggler) {
+        categoryWrap.style.display = categoryOpen ? 'none' : 'block';
+        searchForm.style.display = 'none';
+        categoryOpen = !categoryOpen;
+      } else if (!isCategoryWrap && !isSearchForm) {
+        categoryWrap.style.display = 'none';
+        categoryOpen = false;
+      }
+    });
+  
+    navbarToggler.addEventListener('blur', function () {
+      // Reset categoryOpen on blur to ensure proper functionality
+      categoryOpen = false;
+    });
+  });
+  </script>
+<!-- section-header.// -->

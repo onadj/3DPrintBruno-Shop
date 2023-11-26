@@ -9,9 +9,9 @@ from django.db.models import Avg, Count
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
-    description = models.TextField(max_length=500, blank=True)
-    price = models.IntegerField()
-    images = models.ImageField(upload_to='photos/products')
+    description = models.TextField(max_length=1000, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    images = models.ImageField(upload_to='photos/products', null=True, blank=True)
     stock = models.IntegerField()
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -143,6 +143,38 @@ class VariationManager(models.Manager):
     def headphone_band_widths(self):
         return super(VariationManager, self).filter(variation_category='headphone_band_width', is_active=True)
     
+    def options1(self):
+        return super(VariationManager, self).filter(variation_category='option1', is_active=True)
+
+    def options2(self):
+        return super(VariationManager, self).filter(variation_category='option2', is_active=True)
+
+    def options3(self):
+        return super(VariationManager, self).filter(variation_category='option3', is_active=True)
+
+
+    def options4(self):
+        return super(VariationManager, self).filter(variation_category='option4', is_active=True)
+
+    def options5(self):
+        return super(VariationManager, self).filter(variation_category='option5', is_active=True)
+
+    def options6(self):
+        return super(VariationManager, self).filter(variation_category='option6', is_active=True)
+
+    def options7(self):
+        return super(VariationManager, self).filter(variation_category='option7', is_active=True)
+
+    def options8(self):
+        return super(VariationManager, self).filter(variation_category='option8', is_active=True)
+
+    def options9(self):
+        return super(VariationManager, self).filter(variation_category='option9', is_active=True)
+
+    def options10(self):
+        return super(VariationManager, self).filter(variation_category='option10', is_active=True)
+
+    
 variation_category_choice = (
     ('color', 'color'),
     ('size', 'size'),
@@ -176,7 +208,16 @@ variation_category_choice = (
     ('drawer_size', 'drawer_size'),
     ('him_color', 'him_color'),
     ('she_color', 'she_color'),
-    ('headphone_band_width', 'headphone_band_width'),
+    ('option1', 'option1'),
+    ('option2', 'option2'),
+    ('option3', 'option3'),
+    ('option4', 'option4'),
+    ('option5', 'option5'),
+    ('option6', 'option6'),
+    ('option7', 'option7'),
+    ('option8', 'option8'),
+    ('option9', 'option9'),
+    ('option10', 'option10'),
 
 )
 

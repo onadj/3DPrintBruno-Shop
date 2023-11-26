@@ -49,16 +49,13 @@ class Order(models.Model):
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
 
-    def selected_variations(self):
+    def get_selected_variations(self):
         return ', '.join([f"{variation.variation_category}: {variation.variation_value}" for order_product in self.orderproduct_set.all() for variation in order_product.variations.all()])
 
     @property
     def product_names(self):
         return ', '.join([order_product.product.product_name for order_product in self.orderproduct_set.all()])
 
-    @property
-    def selected_variations(self):
-        return ', '.join([f"{variation.variation_category}: {variation.variation_value}" for order_product in self.orderproduct_set.all() for variation in order_product.variations.all()])
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

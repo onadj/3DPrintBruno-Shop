@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block content %}
+
+<style>
+  
+</style>
 <section class="section-content padding-y bg">
     <div class="container">
         <!-- ============================ COMPONENT 1 ================================= -->
@@ -82,13 +86,14 @@
                               <tr>
                                   <td>
                                       <figure class="itemside align-items-center">
+                                     
                                           <div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
                                           <figcaption class="info">
                                               <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
                                               <p class="text-muted small">
                                                   {% if cart_item.variations.all %}
                                                       {% for item in cart_item.variations.all %}
-                                                          {{ item.variation_category | capfirst }}: {{ item.variation_value | capfirst }}<br>
+                                                          <strong>{{ item.variation_category | capfirst }}</strong>: {{ item.variation_value | capfirst }}<br>
                                                           {% if item.extra_cost > 0 %}
                                                               (+{{ item.extra_cost|floatformat:2 }} per item)<br>
                                                           {% endif %}
@@ -105,7 +110,7 @@
                                       <!-- Display the Subtotal for each cart item -->
                                       <div class="price-wrap">
                                         
-                                          <var class="price">$ {{ cart_item.subtotal|floatformat:2 }}</var>
+                                          <var class="price">€ {{ cart_item.subtotal|floatformat:2 }}</var>
                                       </div>
                                       </div>
                                   </td>
@@ -113,17 +118,18 @@
                               {% endfor %}
                           </tbody>
                       </table>
+                      <hr>
                       <dl class="dlist-align">
-                          <dt>Total price:</dt>
-                          <dd class="text-right">$ {{ total|floatformat:2|default:0 }}</dd>
+                          <dt>Subtotal:</dt>
+                          <dd class="text-right">€{{ total|floatformat:2|default:0 }}</dd>
                       </dl>
                       <dl class="dlist-align">
-                          <dt>Tax:</dt>
-                          <dd class="text-right">$ {{ tax|floatformat:2 }}</dd>
+                          <dt>Shipping Cost:</dt>
+                          <dd class="text-right">€ {{ tax|floatformat:2 }}</dd>
                       </dl>
                       <dl class="dlist-align">
                           <dt>Grand Total:</dt>
-                          <dd class="text-right text-dark b"><strong>$ {{ grand_total|floatformat:2 }}</strong></dd>
+                          <dd class="text-right text-dark b"><strong>€ {{ grand_total|floatformat:2 }}</strong></dd>
                       </dl>
                       <hr>
                       <form action="{% url 'checkout' %}" method="post">
@@ -138,5 +144,35 @@
         <!-- ============================ COMPONENT 1 END .// ================================= -->
     </div> <!-- container .//  -->
 </section>
+<button id="scrollToTopBtn" title="Go to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+<script>
+  window.onscroll = function () {
+      scrollFunction();
+  };
+
+  function scrollFunction() {
+      var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          scrollToTopBtn.style.display = "block";
+      } else {
+          scrollToTopBtn.style.display = "none";
+      }
+  }
+
+  document.getElementById("scrollToTopBtn").onclick = function () {
+      scrollToTop();
+  };
+
+  function scrollToTop() {
+      var position = document.documentElement.scrollTop || document.body.scrollTop;
+      if (position > 0) {
+          window.requestAnimationFrame(scrollToTop);
+          window.scrollTo(0, position - position / 8);
+      }
+  }
+</script>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 {% endblock %}

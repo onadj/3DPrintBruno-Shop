@@ -50,7 +50,7 @@ Bootstrap with custom variables
 }
 
 html {
-  font-family: 'Lato';
+  font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -2437,9 +2437,7 @@ fieldset:disabled a.btn {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(110, 110, 110, 0.5);
 }
-.shopping-bag-icon {
-  font-size: 24px; /* Adjust the size as needed */
-}
+
 .btn-success {
   color: #fff;
   background-color: #00b517;

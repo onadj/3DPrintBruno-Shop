@@ -2,112 +2,174 @@
 {% load static %}
 
 {% block content %}
-<!-- ========================= SECTION PAGETOP ========================= -->
-<section class="section-pagetop bg">
-    <div class="container">
-        {% if 'search' in request.path %}
-            <h2 class="title-page">Search Result</h2>
-        {% else %}
-            <h2 class="title-page">Our Store</h2>
-        {% endif %}
-    </div> <!-- container //  -->
-</section>
-<!-- ========================= SECTION INTRO END// ========================= -->
-
-<!-- ========================= SECTION CONTENT ========================= -->
-<section class="section-content padding-y">
-    <div class="container">
-        <div class="row">
-            <aside class="col-md-3">
-                <div class="card">
-                    <article class="filter-group">
-                        <header class="card-header">
-                            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-                                <i class="icon-control fa fa-chevron-down"></i>
-                                <h6 class="title text-secondary">Categories</h6>
-                            </a>
-                        </header>
-                        <div class="filter-content collapse show" id="collapse_1" style="">
-                            <div class="card-body">
-                                <ul class="list-group">
-                                    <li class="list-group-item"><a href="{% url 'store' %}"><strong><p class="text-secondary">Show All Products</p> </strong></a></li>
-                                    {% for category in links %}
-                                        <li class="list-group-item">
-                                            <a href="{{ category.get_url }}">
-                                                {% if category.cat_image %}
-                                                <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}" class="img-fluid img-thumbnail category-image">
-
-                                                {% endif %}
-                                                <span class="text-secondary"><strong>{{ category.category_name }}</strong></span>
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div> <!-- card-body.// -->
+    
+    <section class="section-pagetop bg">
+        <div class="container">
+            {% if 'search' in request.path %}
+                <h4 class="title-page">Search Result</h4>
+            {% else %}
+                <h4 class="title-page">Our Store</h4>
+            {% endif %}
+        </div> 
+    </section>
+ 
+    <section class="section-content padding-y">
+        <div class="container">
+            <div class="row">
+                <!-- Products Section on Mobile -->
+                <main class="col-md-9 order-md-last">
+                    <header class="border-bottom mb-4 pb-3">
+                        <div class="form-inline">
+                            <span class="mr-md-auto"><b>{{ product_count }}</b> items found </span>
                         </div>
-                    </article> <!-- filter-group  .// -->
-                </div> <!-- card.// -->
-            </aside> <!-- col.// -->
-            <main class="col-md-9">
-                <header class="border-bottom mb-4 pb-3">
-                    <div class="form-inline">
-                        <span class="mr-md-auto"><b>{{ product_count }}</b> items found </span>
-                    </div>
-                </header><!-- sect-heading -->
-                <div class="row">
-                    {% if products %}
-                    {% for product in products %}
-                    <div class="col-md-4">
-                        <figure class="card card-product-grid">
-                            <div class="img-wrap">
-                                <a href="{{ product.get_url }}"><img src="{{ product.images.url }}"></a>
-                            </div> <!-- img-wrap.// -->
-                            <figcaption class="info-wrap">
-                                <div class="fix-height">
-                                    <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-                                    <div class="price-wrap mt-2">
-                                        <span class="price">$ {{ product.price }}</span>
-                                    </div> <!-- price-wrap.// -->
-                                </div>
-                                <a href="{{ product.get_url }}" class="btn btn-block btn-secondary">View Details</a>
-                            </figcaption>
-                        </figure>
-                    </div> <!-- col.// -->
-                    {% endfor %}
-                    {% else %}
-                    <div>
-                        <h2>No result found. Please try again.</h2>
-                    </div>
-                    {% endif %}
-                </div> <!-- row end.// -->
-				<nav class="mt-4" aria-label="Page navigation sample">
-					{% if products.has_other_pages %}
-					<ul class="pagination">
-						{% if products.has_previous %}
-							<li class="page-item"><a class="page-link text-secondary" href="?page={{products.previous_page_number}}">Previous</a></li>
-						{% else %}
-							<li class="page-item disabled"><a class="page-link text-secondary" href="#">Previous</a></li>
-						{% endif %}
-						{% for i in products.paginator.page_range %}
-							{% if products.number == i %}
-								<li class="page-item active"><a class="page-link text-secondary" href="#">{{i}}</a></li>
-							{% else %}
-								<li class="page-item"><a class="page-link text-secondary" href="?page={{i}}">{{i}}</a></li>
-							{% endif %}
-						{% endfor %}
-						{% if products.has_next %}
-							<li class="page-item"><a class="page-link text-secondary" href="?page={{products.next_page_number}}">Next</a></li>
-						{% else %}
-							<li class="page-item disabled"><a class="page-link text-secondary" href="#">Next</a></li>
-						{% endif %}
-					</ul>
-					{% endif %}
-				</nav>
-				
-				
-            </main> <!-- col.// -->
-        </div>
-    </div> <!-- container .//  -->
-</section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+                    </header>
+                    <div class="row">
+                        {% if products %}
+                            {% for product in products %}
+                                <div class="col-md-4">
+                                    <figure class="card card-product-grid">
+                                        <div class="img-wrap">
+                                            <a href="{{ product.get_url }}"><img src="{{ product.images.url }}"></a>
+                                        </div> <!-- img-wrap.// -->
+                                        <figcaption class="info-wrap">
+                                            <div class="fix-height">
+                                                <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+                                                
+                                                <div class="price-wrap mt-2">
+                                                    <span class="price">€{{ product.price }}</span>
+                                                </div> 
+                                            </div>
+                                            <a href="{{ product.get_url }}" class="btn btn-block btn-secondary">View Details</a>
+                                        </figcaption>
+                                    </figure>
+                                </div> 
+                            {% endfor %}
+                         
+                        {% else %}
+                        <div class="text-center">
+                            <h4>No result found. Please try again.</h4>
+                            
+                        </div>
+                        {% endif %}
+                      
+                    </div> 
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if products.has_other_pages %}
+                            <ul class="pagination">
+                                {% if products.has_previous %}
+                                    <li class="page-item"><a class="page-link text-secondary" href="?page={{products.previous_page_number}}">Previous</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link text-secondary" href="#">Previous</a></li>
+                                {% endif %}
+                                {% for i in products.paginator.page_range %}
+                                    {% if products.number == i %}
+                                        <li class="page-item active"><a class="page-link text-secondary" href="#">{{i}}</a></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link text-secondary" href="?page={{i}}">{{i}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if products.has_next %}
+                                    <li class="page-item"><a class="page-link text-secondary" href="?page={{products.next_page_number}}">Next</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link text-secondary" href="#">Next</a></li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                </main> <!-- col.// -->
+
+                <!-- Categories Section on Mobile -->
+                <aside class="col-md-3 order-md-first">
+                    <div class="card">
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title text-secondary">Categories</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="collapse_1" style="">
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="{% url 'store' %}"><strong><p class="text-secondary">Show All Products</p> </strong></a></li>
+                                        {% for category in links %}
+                                            <li class="list-group-item">
+                                                <a href="{{ category.get_url }}">
+                                                    {% if category.cat_image %}
+                                                        <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}" class="img-fluid img-thumbnail category-image">
+                                                    {% endif %}
+                                                    <span class="text-secondary"><strong>{{ category.category_name }}</strong></span>
+                                                    
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div> 
+                            </div>
+                        </article> 
+                    </div> 
+                </aside> 
+            </div>
+        </div> 
+
+        <button id="scrollToTopBtn" title="Go to top">
+            <i class="fa fa-arrow-up"></i>
+        </button>
+        
+    </section>
+    
+    
 {% endblock %}
+<style>
+    #scrollToTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #6c757d; /* Gray color */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s, opacity 0.3s;
+    }
+
+    #scrollToTopBtn:hover {
+        background-color: #495057; /* Darker gray on hover */
+    }
+
+    #scrollToTopBtn i {
+        margin-right: 2px; /* Adjusted margin to center the icon more precisely */
+    }
+</style>
+
+
+<script>
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    }
+
+    document.getElementById("scrollToTopBtn").onclick = function () {
+        scrollToTop();
+    };
+
+    function scrollToTop() {
+        var position = document.documentElement.scrollTop || document.body.scrollTop;
+        if (position > 0) {
+            window.requestAnimationFrame(scrollToTop);
+            window.scrollTo(0, position - position / 8);
+        }
+    }
+</script>

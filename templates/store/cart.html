@@ -2,6 +2,73 @@
 {% load static %}
 
 {% block content %}
+<style>
+    
+    .table-shopping-cart {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .custom-btn {
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .custom-quantity-input {
+        height: auto !important;
+        padding: 0.375rem 0.75rem !important;
+        font-size: 14px !important;
+    }
+
+    @media (max-width: 767px) {
+        .price-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center; /* Center text in the price-wrap */
+        }
+
+        .price-wrap var {
+            margin-top: 5px;
+        }
+
+        .table-shopping-cart td,
+        .table-shopping-cart th,
+        .table-shopping-cart input {
+            font-size: 14px;
+        }
+
+        /* Adjust the layout for small screens */
+        .table-shopping-cart thead {
+            display: none; /* Hide the table header */
+        }
+
+        .table-shopping-cart tbody td {
+            display: block;
+            text-align: left;
+        }
+
+        .table-shopping-cart tbody tr {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .table-shopping-cart tbody td:before {
+            content: attr(data-th);
+            font-weight: bold;
+            display: inline-block;
+            width: 120px; /* Set a fixed width for the labels */
+        }
+
+        .table-shopping-cart tbody td[data-th="Subtotal"]:before {
+            content: "Subtotal";
+        }
+    }
+</style>
+
+
 <section class="section-content padding-y bg">
     <div class="container">
         <!-- ============================ COMPONENT 1 ================================= -->
@@ -13,94 +80,93 @@
         </div>
         {% else %}
         <div class="row">
-            <aside class="col-lg-9">
+            <div class="col-12">
                 <div class="card">
-                    <table class="table table-borderless table-shopping-cart">
-                        <thead class="text-muted">
-                            <tr class="small text-uppercase">
-                                <th scope="col">Product</th>
-                                <th scope="col" width="120">Quantity</th>
-                                <th scope="col" width="120">Subtotal:</th>
-                                <th scope="col" class="text-right" width="200"> </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for cart_item in cart_items %}
-                            <tr>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <img src="{{ cart_item.product.images.url }}" class="img-sm">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Product</th>
+                                    <th scope="col" width="120">Quantity</th>
+                                    <th scope="col" width="120">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in cart_items %}
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-4">
+                                                <img src="{{ cart_item.product.images.url }}" class="img-fluid">
+                                            </div>
+                                            <div class="col-12 col-sm-8">
+                                                <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
+                                                <p class="text-muted small">
+                                                    {% if cart_item.variations.all %}
+                                                    {% for item in cart_item.variations.all %}
+                                                    <p class="my-0 small text-muted">
+                                                        <strong>{{ item.variation_category | capfirst }}</strong>: {{ item.variation_value | capfirst }}
+                                                    </p>
+                                                    {% if item.extra_cost > 0 %}
+                                                    <p class="my-0 small text-muted">
+                                                        (+{{ item.extra_cost|floatformat:2 }} per item)
+                                                    </p>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                </p>
+                                                <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"
+                                                    onclick="return confirm('Are you sure you want to delete this item?')"
+                                                    class="btn btn-secondary btn-sm">Remove</a>
+                                            </div>
                                         </div>
-                                        <div class="col-8">
-                                            <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
-                                            <p class="text-muted small">
-                                                {% if cart_item.variations.all %}
-                                                
-                                                {% for item in cart_item.variations.all %}
-												<p class="my-0 small text-muted"> {{ item.variation_category | capfirst }}: {{ item.variation_value | capfirst }}</p>
-                                                {% if item.extra_cost > 0 %}
-												<p class="my-0 small text-muted"> (+{{ item.extra_cost|floatformat:2 }} per item)</p>
-                                                {% endif %}
-                                                
-                                                {% endfor %}
-                                                {% endif %}
-                                            </p>
+                                    </td>
+                                    <td>
+                                        <div class="col">
+                                            <div class="input-group input-spinner">
+                                                <div class="input-group-prepend">
+                                                    <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light custom-btn"
+                                                        type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                                </div>
+                                                <input type="text" class="form-control custom-quantity-input" value="{{ cart_item.quantity }}">
+                                                <div class="input-group-append">
+                                                    <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        {% for item in cart_item.variations.all %}
+                                                        <input type="hidden" name="{{ item.variation_category | lower }}"
+                                                            value="{{ item.variation_value | capfirst }}">
+                                                        {% endfor %}
+                                                        <button class="btn btn-light custom-btn" type="submit" id="button-minus">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div> <!-- input-group.// -->
+                                        </div> <!-- col.// -->
+                                    </td>
+                                    <td data-th="Subtotal">
+                                        <div class="price-wrap">
+                                            <var class="price">
+                                                € {{ cart_item.subtotal|floatformat:2 }}
+                                            </var>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col">
-                                        <div class="input-group input-spinner">
-                                           <div class="input-group-prepend">
-                                              <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light"
-                                                 type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
-                                           </div>
-                                           <input type="text" class="form-control" value="{{ cart_item.quantity }}">
-                                           <div class="input-group-append">
-                                              <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
-                                                 {% csrf_token %}
-                                                 {% for item in cart_item.variations.all %}
-                                                 <input type="hidden" name="{{ item.variation_category | lower }}"
-                                                    value="{{ item.variation_value | capfirst }}">
-                                                 {% endfor %}
-                                                 <button class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
-                                              </form>
-                                           </div>
-                                        </div> <!-- input-group.// -->
-                                     </div> <!-- col.// -->
-                                  </td>
-                                  <td>
-                                     <div class="price-wrap">
-                                      
-                                        <var class="price">
-                                            € {{ cart_item.subtotal|floatformat:2 }}
-                                        </var>
-                                     </div> <!-- price-wrap .// -->
-                                  </td>
-                                  <td class="text-right">
-                                     <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"
-                                        onclick="return confirm('Are you sure you want to delete this item?')"
-                                        class="btn btn-danger"> Remove</a>
-                                  </td>
-                               </tr>
-                               {% endfor %}
-                    
-
-
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div> <!-- card.// -->
-            </aside> <!-- col.// -->
-            <aside class="col-lg-3">
+            </div> <!-- col.// -->
+            <div class="col-12 mt-4">
                 <div class="card">
                     <div class="card-body">
                         <dl class="dlist-align">
-                            <dt>Total price:</dt>
+                            <dt>Subtotal:</dt>
                             <dd class="text-right">€ {{ total|floatformat:2|default:0 }}</dd>
                         </dl>
                         <dl class= "dlist-align">
-                            <dt>Tax:</dt>
+                            <dt>Shipping Cost:</dt>
                             <dd class="text-right">€ {{ tax|floatformat:2 }}</dd>
                         </dl>
                         <dl class="dlist-align">
@@ -109,16 +175,46 @@
                         </dl>
                         <hr>
                         <p class="text-center mb-3">
-                            <img src="{% static './images/misc/payments.png' %}" height="26">
+                            <img src="{% static './images/misc/payments.png' %}" height="26" class="img-fluid">
                         </p>
-                        <a href="{% url 'checkout' %}" class="btn btn-secondary btn-block"> Checkout </a>
+                        <a href="{% url 'checkout' %}" class="btn btn-secondary btn-block">Checkout</a>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
-            </aside> <!-- col.// -->
+            </div> <!-- col.// -->
         </div> <!-- row.// -->
         {% endif %}
         <!-- ============================ COMPONENT 1 END .// ================================= -->
     </div> <!-- container .//  -->
 </section>
+<button id="scrollToTopBtn" title="Go to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+<script>
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    }
+
+    document.getElementById("scrollToTopBtn").onclick = function () {
+        scrollToTop();
+    };
+
+    function scrollToTop() {
+        var position = document.documentElement.scrollTop || document.body.scrollTop;
+        if (position > 0) {
+            window.requestAnimationFrame(scrollToTop);
+            window.scrollTo(0, position - position / 8);
+        }
+    }
+</script>
 {% endblock %}

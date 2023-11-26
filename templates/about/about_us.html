@@ -13,7 +13,7 @@
 
         <section class="section-name padding-y-sm">
             <div class="row">
-                <div class="col-md-8 mx-auto">
+                <div class="col-md-8 mx-auto text-center">
                     <h3 class="section-title" style="font-size: 28px;">{{ about.title }}</h3>
                     <br>
                     <p class="text-muted" style="font-size: 23px; margin-top: 21px;">{{ about.content }}</p>
@@ -23,4 +23,34 @@
             </div>
         </section>
     </div>
+    <button id="scrollToTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <script>
+        window.onscroll = function () {
+            scrollFunction();
+        };
+    
+        function scrollFunction() {
+            var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+    
+        document.getElementById("scrollToTopBtn").onclick = function () {
+            scrollToTop();
+        };
+    
+        function scrollToTop() {
+            var position = document.documentElement.scrollTop || document.body.scrollTop;
+            if (position > 0) {
+                window.requestAnimationFrame(scrollToTop);
+                window.scrollTo(0, position - position / 8);
+            }
+        }
+    </script>
 {% endblock %}

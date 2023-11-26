@@ -1,0 +1,52 @@
+<style>
+    #scrollToTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #6c757d; /* Gray color */
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, opacity 0.3s;
+    }
+  
+    #scrollToTopBtn:hover {
+      background-color: #495057; /* Darker gray on hover */
+    }
+  
+    #scrollToTopBtn i {
+      margin-right: 2px; /* Adjusted margin to center the icon more precisely */
+    }
+  </style>
+  
+  <script>
+    window.onscroll = function () {
+      scrollFunction();
+    };
+  
+    function scrollFunction() {
+      var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+  
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        scrollToTopBtn.style.display = "block";
+      } else {
+        scrollToTopBtn.style.display = "none";
+      }
+    }
+  
+    document.getElementById("scrollToTopBtn").onclick = function () {
+      scrollToTop();
+    };
+  
+    function scrollToTop() {
+      var position = document.documentElement.scrollTop || document.body.scrollTop;
+      if (position > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        window.scrollTo(0, position - position / 8);
+      }
+    }
+  </script>

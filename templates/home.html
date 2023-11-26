@@ -7,14 +7,17 @@
   .contact-content {
     padding: 20px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 1); /* Set the background color to white */
+    background: rgba(255, 255, 255, 1);
     text-align: center;
   }
 
   .about-img,
-  .contact-img {
-    width: 100%; /* Adjust the width as needed */
-    max-height: 300px; /* Adjust the height as needed */
+  .contact-img,
+  .category-home-image,
+  .popular-product-image,
+  .banner-image {
+    width: 100%;
+    height: 300px; /* Set a fixed height for equal size */
     object-fit: cover;
     border-radius: 10px;
   }
@@ -35,82 +38,144 @@
     background-color: gray;
     color: white;
   }
+
+  .category-card {
+    margin-bottom: 20px;
+  }
 </style>
 
 <section class="section-intro padding-y-sm">
-    <div class="container-fluid p-0">
-      <div class="intro-banner-wrap">
-        <img src="media/photos/products/banner.JPG" class="img-fluid rounded banner-image w-100">
-      </div>
+  <div class="container-fluid p-0">
+    <div class="intro-banner-wrap">
+      <img src="media/photos/products/banner.JPG" class="img-fluid rounded banner-image w-100">
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section-name padding-y-sm">
-    <div class="container">
-      <header class="section-heading">
-        <a href="{% url 'store' %}" class="btn btn-outline-secondary float-right">See All</a>
-        <h3 class="section-title">Popular Products</h3>
-      </header>
+<!-- Categories Section -->
+<section class="category-section">
+  <div class="container">
+    <header class="section-heading">
+      <h4 class="section-title text-secondary">Explore Categories</h4>
+    </header>
 
-      <div class="row">
-        {% for product in products %}
-        <div class="col-md-3">
-          <div class="card card-product-grid">
-            <a href="{{ product.get_url }}" class="img-wrap">
-              <img src="{{ product.images.url }}" class="img-fluid" alt="{{ product.product_name }}">
-            </a>
-            <figcaption class="info-wrap">
-              <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-              <div class="price mt-1">$ {{ product.price }}</div> 
-              <div class="rating-star">
-                <span>
-                  <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
-                  <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
-                  <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
-                  <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
-                  <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
-                </span>
-              </div>
-            </figcaption>
-          </div>
-        </div> 
-        {% endfor %}
-      </div> 
-    </div>
-  </section>
-
-  <!-- About Us Section -->
-  <section class="section-about padding-y-lg">
-    <div class="container">
-      <div class="card bg-white">
-        <div class="card-body">
-          <div class="about-content">
-            <img src="media/photos/products/about.jpg" class="about-img" alt="About Us Image">
-            <h3></h3>
-            <p></p>
-            <a href="{% url 'about_us' %}" class="btn btn-secondary btn-lg btn-custom mx-auto">Learn More</a>
+    <div class="row">
+      {% for category in links %}
+      <div class="col-md-4 category-card">
+        <div class="card">
+          <a href="{{ category.get_url }}" class="img-wrap">
+            {% if category.cat_image %}
+              <img src="{{ category.cat_image.url }}" class="category-home-image" alt="{{ category.category_name }}">
+            {% endif %}
+          </a>
+          <div class="card-body">
+            <h5 class="category-title">{{ category.category_name }}</h5>
+            <a href="{{ category.get_url }}" class="btn btn-secondary btn-custom">View Products</a>
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Contact Section -->
-  <section class="section-contact padding-y-lg">
-    <div class="container">
-      <div class="card bg-white">
-        <div class="card-body">
-          <div class="contact-content">
-            <img src="media/photos/products/contact1.jpg" class="contact-img" alt="Contact Us Image">
-            <h3></h3>
-            <p></p>
-            <a href="{% url 'contact' %}" class="btn btn-secondary btn-lg btn-custom mx-auto">Get in Touch</a>
-          </div>
+<section class="section-name padding-y-sm">
+  <div class="container">
+    <header class="section-heading">
+      <a href="{% url 'store' %}" class="btn btn-outline-secondary float-right">See All</a>
+      <h4 class="section-title text-secondary">Popular Products</h4>
+    </header>
+
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3">
+        <div class="card card-product-grid">
+          <a href="{{ product.get_url }}" class="img-wrap">
+            <img src="{{ product.images.url }}" class="img-fluid popular-product-image" alt="{{ product.product_name }}">
+          </a>
+          <figcaption class="info-wrap">
+            <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+            <div class="price mt-1">€{{ product.price }}</div> 
+            <div class="rating-star">
+              <span>
+                <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+              </span>
+            </div>
+          </figcaption>
+        </div>
+      </div>
+      {% endfor %}
+    </div> 
+  </div>
+</section>
+
+<!-- About Us Section -->
+<section class="section-about padding-y-lg">
+  <div class="container">
+    <div class="card bg-white">
+      <div class="card-body">
+        <div class="about-content">
+          <img src="media/photos/products/about.jpg" class="about-img" alt="About Us Image">
+          <h3></h3>
+          <p></p>
+          <a href="{% url 'about_us' %}" class="btn btn-secondary btn-custom mx-auto">Learn More</a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="section-contact padding-y-lg">
+  <div class="container">
+    <div class="card bg-white">
+      <div class="card-body">
+        <div class="contact-content">
+          <img src="media/photos/products/contact1.jpg" class="contact-img" alt="Contact Us Image">
+          <h3></h3>
+          <p></p>
+          <a href="{% url 'contact' %}" class="btn btn-secondary  btn-custom mx-auto">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>
+<button id="scrollToTopBtn" title="Go to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+<script>
+  window.onscroll = function () {
+    scrollFunction();
+  };
+
+  function scrollFunction() {
+    var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  }
+
+  document.getElementById("scrollToTopBtn").onclick = function () {
+    scrollToTop();
+  };
+
+  function scrollToTop() {
+    var position = document.documentElement.scrollTop || document.body.scrollTop;
+    if (position > 0) {
+      window.requestAnimationFrame(scrollToTop);
+      window.scrollTo(0, position - position / 8);
+    }
+  }
+</script>
+
 {% endblock %}

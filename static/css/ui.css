@@ -3,7 +3,7 @@
 /* ==================== GLOBAL STYLES ======================= */
 @import url("https://rsms.me/inter/inter.css");
 html {
-  font-family: 'Lato';
+  font-family: "Inter", sans-serif;
   font-size: 15px;
 }
 
@@ -13,9 +13,6 @@ INCLUDE STYLES AND COMPONENTS
 /* ================== HELPERS  =================== */
 a:hover {
   text-decoration: none;
-}
-.shopping-bag-icon {
-  font-size: 24px; /* Adjust the size as needed */
 }
 
 .img-wrap {
@@ -431,8 +428,8 @@ p:last-child {
 }
 
 .brand-wrap .logo, .navbar-brand .logo {
-  margin-right: 100px;
-  max-height: 100px;
+  margin-right: 7px;
+  max-height: 42px;
   display: inline-block;
 }
 
@@ -1040,7 +1037,7 @@ a[class*=card]:hover .title {
 }
 
 .item-logo {
-  margin-bottom: 100px;
+  margin-bottom: 20px;
   text-align: center;
 }
 .item-logo img {
