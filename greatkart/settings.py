@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 import os
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -28,7 +29,7 @@ SECRET_KEY = 'Ogyucs{fy*R{C^GVaAUpO+M>U@*.Nwa_bxc^~b~fWHICq4PC5-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool) # True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['http://3dprintbruno-shop-env.eba-djh7yc4n.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -161,22 +162,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
-STATIC_URL = 'static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_URL = '/static/'  # Corrected with a trailing slash
+ # Use square brackets instead of parentheses
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/products')
-
+STATIC_ROOT = BASE_DIR / 'static'
 
 # media files configuration
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR /'media'
-
-
-from django.contrib.messages import constants as messages
-MESSAGE_TAGS = {
-    messages.ERROR: 'danger',
-}
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # SMTP configuration
