@@ -29,7 +29,7 @@ SECRET_KEY = 'Ogyucs{fy*R{C^GVaAUpO+M>U@*.Nwa_bxc^~b~fWHICq4PC5-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool) # True
 
-ALLOWED_HOSTS = ['http://3dprintbruno-shop-env.eba-djh7yc4n.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -168,6 +168,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/products')
 STATIC_ROOT = BASE_DIR / 'static'
 
+STATICFILES_DIRS = [
+    'greatkart/static/',
+]
 # media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

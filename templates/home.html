@@ -47,7 +47,7 @@
 <section class="section-intro padding-y-sm">
   <div class="container-fluid p-0">
     <div class="intro-banner-wrap">
-      <img src="media/photos/products/banner.JPG" class="img-fluid rounded banner-image w-100">
+      <img src="{% static 'images/banner.JPG' %}" class="img-fluid rounded banner-image w-100">
     </div>
   </div>
 </section>
@@ -119,7 +119,7 @@
     <div class="card bg-white">
       <div class="card-body">
         <div class="about-content">
-          <img src="media/photos/products/about.jpg" class="about-img" alt="About Us Image">
+          <img src="{% static 'images/aboutus1.jpg' %}" class="about-img" alt="About Us Image">
           <h3></h3>
           <p></p>
           <a href="{% url 'about_us' %}" class="btn btn-secondary btn-custom mx-auto">Learn More</a>
