@@ -97,7 +97,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases ////
 # Database Configuration
 
 DATABASES = {
