@@ -186,9 +186,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # SMTP configuration
+# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587  # Gmail SMTP uses port 587 for TLS
-EMAIL_HOST_USER = 'djambodprintinglab@gmail.com'
-EMAIL_HOST_PASSWORD = 'vwyulrwyevvnmfnj'
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT'))  # Convert to int, and default to 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() == 'true'
