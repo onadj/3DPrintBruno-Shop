@@ -87,7 +87,7 @@
     </header>
 
     <div class="row">
-      {% for product in products %}
+      {% for product in products|slice:":5" %}
       <div class="col-md-3">
         <div class="card card-product-grid">
           <a href="{{ product.get_url }}" class="img-wrap">
@@ -112,6 +112,7 @@
     </div> 
   </div>
 </section>
+
 
 <!-- About Us Section -->
 <section class="section-about padding-y-lg">
