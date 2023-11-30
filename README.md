@@ -1,6 +1,6 @@
 # Djambo3D - 3D Printing Lab
 
-![Djambo3D Screenshot](images/image.jpg)
+![Djambo3D Screenshot](images/image.JPG)
 
 Welcome to Djambo3D, your one-stop destination for unique 3D-printed products! This Django-based webshop is hosted on Digital Ocean at [https://oyster-app-qivlh.ondigitalocean.app/](https://oyster-app-qivlh.ondigitalocean.app/).
 
